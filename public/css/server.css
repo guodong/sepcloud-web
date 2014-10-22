@@ -1,0 +1,63 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: #fff;
+	font-family: "宋体";
+}
+
+.loginBox {
+	width: 420px;
+	height: 250px;
+	padding: 0 20px;
+	border: 1px solid #fff;
+	color: #000;
+	margin-top: 40px;
+	border-radius: 8px;
+	background: white;
+	box-shadow: 0 0 15px #222;
+		to(#f4f4f4));
+	font: 11px/1.5em 'Microsoft YaHei';
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -210px;
+	margin-top: -115px;
+}
+
+.loginBox h2 {
+	height: 45px;
+	font-size: 20px;
+	font-weight: normal;
+	text-align: center;
+}
+
+.loginBox .left {
+	border-right: 1px solid #ccc;
+	height: 100%;
+	padding-right: 20px;
+}
+
+.regBtn {
+	margin-top: 21px;
+}
+.logo{
+	text-align: center;
+	margin-top: -160px;
+}
+.logo img{
+	height: 150px;
+}
+.nav-tabs{
+	margin-bottom: 5px;
+}
+
+.tab-pane{
+	padding-top: 5px;
+	list-style:none;
+}
+a{
+	cursor: pointer;
+}
