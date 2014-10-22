@@ -1,0 +1,126 @@
+<div class="btn-group">
+	<button type="button" class="btn btn-success" data-toggle="modal"
+		data-target="#create">
+		<span class="glyphicon glyphicon-plus"></span> Create Instance
+	</button>
+</div>
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>Name</th>
+			<th>Uuid</th>
+			<th>Spice Port</th>
+			<th>Cpu</th>
+			<th>Memory</th>
+			<th>Disk</th>
+			<th>OS</th>
+			<th>Allocate</th>
+			<th>Start Date</th>
+			<th>Status</th>
+			<th>Manage</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="v in instances | filter:query | orderBy:sorter">
+			<td>{{v.id}}</td>
+			<td>{{v.name}}</td>
+			<td>{{v.uuid}}</td>
+			<td>{{v.spiceport}}</td>
+			<td>{{v.cpu}}</td>
+			<td>{{v.memory}}MB</td>
+			<td>{{v.disk}}G</td>
+			<td>{{v.os}}</td>
+			<td>{{v.user.realname}}</td>
+			<td>{{v.created_at}}</td>
+			<td><span class="label label-success" ng-if="v.status==1">Running</span><span class="label label-danger" ng-show="v.status==0">Shutdown</span></td>
+			<td><div class="btn-group">
+					<button class="btn btn-default btn-xs">
+						<span class="glyphicon glyphicon-pencil"></span> Edit
+					</button>
+					<button class="btn btn-default btn-xs dropdown-toggle"
+						type="button" data-toggle="dropdown">
+						Manage <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu">
+						<li ng-if="v.status==0"><a href="javascript:;" ng-click="start(v)"><span class="glyphicon glyphicon-play"></span> Start</a></li>
+						<li ng-if="v.status==1"><a href="javascript:;" ng-click="shutdown(v)"><span class="glyphicon glyphicon-off"></span> ShutDown</a></li>
+						<li><a href="#"><span class="glyphicon glyphicon-refresh"></span> Restart</a></li>
+						<li class="divider"></li>
+						<li><a href="#"><span class="glyphicon glyphicon-trash"></span> Delete</a></li>
+					</ul>
+				</div></td>
+		</tr>
+	</tbody>
+</table>
+
+<div class="modal fade" id="create">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">Create Instance</h4>
+			</div>
+			<div class="modal-body">
+				<form role="form" name="createform" action="/instance/create" method="post">
+					<div class="form-group">
+						<label>Instance Name</label> <input
+							type="text" class="form-control" name="name" ng-model="instance.name"
+							placeholder="Enter name">
+					</div>
+					<div class="form-group">
+						<label>Cpus</label> <select name="cpu" ng-model="instance.cpu" required
+							class="form-control">
+							<option>1</option>
+							<option>2</option>
+							<option>3</option>
+							<option>4</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="exampleInputPassword1">Memory</label> <select name="memory" ng-model="instance.memory" required
+							class="form-control">
+							<option value="512">512MB</option>
+							<option value="1024">1GB</option>
+							<option value="2048">2GB</option>
+							<option value="4096">4GB</option>
+							<option value="8192">8GB</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="exampleInputPassword1">Disk</label> <select name="disk" ng-model="instance.disk" required
+							class="form-control">
+							<option value="20">20GB</option>
+							<!-- <option value="40">40GB</option>
+							<option value="60">60GB</option>
+							<option value="80">80GB</option>
+							<option value="100">100GB</option> -->
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="exampleInputPassword1">OS</label> <select name="os" ng-model="instance.os" required
+							class="form-control">
+							<option value="centos">CentOS</option>
+							<option value="win8.1">Windows 8.1</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="exampleInputPassword1">Allocate</label> <select name="user_id" ng-model="instance.user_id"
+							class="form-control">
+							<option ng-repeat="v in users" value="{{v.id}}">{{v.realname}}</option>
+						</select>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-success" ng-click="create(instance)" ng-disabled="createform.$invalid">Create</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

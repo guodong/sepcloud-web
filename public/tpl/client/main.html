@@ -1,0 +1,52 @@
+<div style="height: 20px"></div>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">My Instances <a class="pull-right" href="#/client">Logout</a></h3>
+	</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-sm-6 col-md-3" ng-repeat="v in vms">
+				<div class="thumbnail">
+					<div style="height: 256px;overflow:hidden;text-align: center;">
+						<img ng-src="/img/{{v.os}}.png" alt="">
+					</div>
+					<div class="caption">
+						<h3>{{v.name}} <small>{{v.os}}</small></h3>
+						<table style="width: 100%">
+							<tr>
+								<td style="">CPU: {{v.cpu}}</td>
+								<td>Memory: {{v.memory}}MB</td>
+								<td><span class="label label-success" ng-if="v.status==1">Running</span><span
+								class="label label-danger" ng-show="v.status==0">Shutdown</span></td>
+							</tr>
+						</table>
+						<p>
+						<div class="btn-group">
+							<button class="btn btn-success" role="button" ng-click="open(v)">Open</button>
+							<button type="button" class="btn btn-primary dropdown-toggle"
+								data-toggle="dropdown">
+								Operations <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" role="menu">
+								<li ng-if="v.status==0"><a href="javascript:;"
+									ng-click="start(v)"><span class="glyphicon glyphicon-play"></span>
+										Start</a></li>
+								<li ng-if="v.status==1"><a href="javascript:;"
+									ng-click="shutdown(v)"><span
+										class="glyphicon glyphicon-off"></span> ShutDown</a></li>
+								<li><a href="#"><span
+										class="glyphicon glyphicon-refresh"></span> Restart</a></li>
+								<li class="divider"></li>
+								<li><a href="#"><span class="glyphicon glyphicon-trash"></span>
+										Delete</a></li>
+							</ul>
+						</div>
+						
+						</p>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,29 @@
+{
+  "name": "storedb",
+  "main": "storedb.js",
+  "version": "0.1.2",
+  "homepage": "https://github.com/djyde/StoreDB",
+  "authors": [
+    "randy <randyrpiv@gmail.com>"
+  ],
+  "description": "MongoDB-like localStorage library",
+  "keywords": [
+    "mongodb",
+    "localStorage",
+    "SPA",
+    "html5",
+    "angularjs"
+  ],
+  "license": "MIT",
+  "private": true,
+  "_release": "0.1.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.2",
+    "commit": "a5841acc20b2e6dd358cc4adbab68cce19de8577"
+  },
+  "_source": "git://github.com/djyde/StoreDB.git",
+  "_target": "~0.1.2",
+  "_originalSource": "storedb",
+  "_direct": true
+}

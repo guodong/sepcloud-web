@@ -1,0 +1,19 @@
+{
+  "name": "storedb",
+  "main": "storedb.js",
+  "version": "0.1.2",
+  "homepage": "https://github.com/djyde/StoreDB",
+  "authors": [
+    "randy <randyrpiv@gmail.com>"
+  ],
+  "description": "MongoDB-like localStorage library",
+  "keywords": [
+    "mongodb",
+    "localStorage",
+    "SPA",
+    "html5",
+    "angularjs"
+  ],
+  "license": "MIT",
+  "private": true
+}

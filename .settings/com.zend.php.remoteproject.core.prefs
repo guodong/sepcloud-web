@@ -1,0 +1,9 @@
+LaunchURL=http\://server/folder
+Save\ Mode=ON_SAVE
+SelectedHostGUID=5dbfc4bc-1e63-4dbc-98ba-52ef443ba132
+UploadFolder=/sepcloud
+eclipse.preferences.version=1
+exclusionPatterns=
+inclusionPatterns=
+isLocalProjectEnabled=false
+isRemoteProjectEnabled=true

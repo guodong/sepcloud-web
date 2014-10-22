@@ -1,0 +1,17 @@
+
+<div class="loginBox">
+	<div class="logo">
+		<img src="/img/logo.png">
+	</div>
+	<form role="form" name="loginform">
+		<h2>Sepcloud Login</h2>
+		<div class="form-group">
+			<input type="text" class="form-control" required ng-model="m.username"
+				placeholder="Enter Username">
+		</div>
+		<div class="form-group">
+			<input type="password" class="form-control" required ng-model="m.password" placeholder="Enter Password">
+		</div>
+		<button type="submit" class="btn btn-success" ng-disabled="loginform.$invalid" ng-click="login(m)" style="width: 100%">Login</button>
+	</form>
+</div>
