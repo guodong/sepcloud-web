@@ -28,12 +28,11 @@ appControllers.controller('IndexCtrl', function ($scope, $routeParams, $location
         $location.path('login');
         return;
     }
-    $scope.loadInstance();
-    $scope.check();
-    var p = setInterval($scope.check, 5000);
+    $scope.instances = [];
     $scope.loadInstance = function(){
     	$http.get('instance.json').success(function (data) {
 	        $scope.instances = data;
+	        $scope.check();
 	    });
     }
     
@@ -58,6 +57,8 @@ appControllers.controller('IndexCtrl', function ($scope, $routeParams, $location
             });
         }
     }
+    $scope.loadInstance();
+    var p = setInterval($scope.check, 5000);
     $("nav li").removeClass("active");
     $("nav li").find("[href='#/instance']").parent().addClass("active");
     $scope.create = function (instance) {
