@@ -51,9 +51,8 @@ class InstanceController extends BaseController
 
     public function create ()
     {
-        // $vm = Vm::create($_POST);
         $uuid = Uuid::uuid1();
-        $cmd = "qemu-img create -b /var/lib/libvirt/images/{$_POST['os']}.base.qcow2 -f qcow2 /var/lib/libvirt/images/{$uuid}.qcow2";
+        $cmd = "qemu-img create -b /var/lib/libvirt/images/{$_POST['os']}.base.qcow2 -f qcow2 /var/lib/libvirt/images/{$uuid}.client.qcow2";
         system($cmd);
         sleep(1);
         $_POST['uuid'] = $uuid;
@@ -62,71 +61,56 @@ class InstanceController extends BaseController
             $port = 5900;
         $spiceport = ++$port;
         $_POST['spiceport'] = $spiceport;
+
+        $mac = '52:54:'.implode(':',str_split(substr(md5(mt_rand()),0,8),2));
         $xml = <<<XML
 <domain type='kvm'>
   <name>{$uuid}</name>
   <uuid>{$uuid}</uuid>
   <memory unit='MiB'>{$_POST['memory']}</memory>
   <currentMemory unit='MiB'>{$_POST['memory']}</currentMemory>
-  <vcpu placement='static'>{$_POST['cpu']}</vcpu>
+  <vcpu>{$_POST['cpu']}</vcpu>
   <os>
-    <type arch='x86_64' machine='pc-i440fx-rhel7.0.0'>hvm</type>
-    <boot dev='hd'/>
+    <type arch='x86_64' machine='pc'>hvm</type>
+    <boot dev='cdrom'/>
   </os>
   <features>
     <acpi/>
     <apic/>
     <pae/>
   </features>
-  <clock offset='utc'/>
+  <clock offset='localtime'/>
   <on_poweroff>destroy</on_poweroff>
   <on_reboot>restart</on_reboot>
   <on_crash>restart</on_crash>
   <devices>
     <emulator>/usr/libexec/qemu-kvm</emulator>
     <disk type='file' device='disk'>
-      <driver name='qemu' type='qcow2' cache='none'/>
-      <source file='/var/lib/libvirt/images/{$uuid}.qcow2'/>
-      <target dev='hda' bus='ide'/>
-      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+      <driver name='qemu' type='qcow2'/>
+      <source file='/var/lib/libvirt/images/{$uuid}.client.qcow2'/>
+      <target dev='hda' bus='virtio'/>
     </disk>
-    <controller type='usb' index='0'>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x2'/>
-    </controller>
-    <controller type='pci' index='0' model='pci-root'/>
-    <controller type='virtio-serial' index='0'>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0'/>
-    </controller>
-    <interface type='bridge'>
-      <mac address='52:54:00:e9:3a:8c'/>
-      <source bridge='br0'/>
-      <model type='rtl8139'/>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
-    </interface>
-    <serial type='pty'>
-      <target port='0'/>
-    </serial>
-    <console type='pty'>
-      <target type='serial' port='0'/>
-    </console>
     <channel type='spicevmc'>
       <target type='virtio' name='com.redhat.spice.0'/>
       <address type='virtio-serial' controller='0' bus='0' port='1'/>
     </channel>
-    <input type='mouse' bus='ps2'/>
-    <graphics type='spice' port='{$spiceport}' autoport='no' listen='0.0.0.0'>
-      <listen type='address' address='0.0.0.0'/>
-    </graphics>
-    <sound model='ich6'>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
-    </sound>
+    <graphics type='spice' port='{$spiceport}' autoport='no' listen='0.0.0.0'/>
     <video>
       <model type='qxl' ram='65536' vram='65536' heads='1'/>
+      <alias name='video0'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
     </video>
-    <memballoon model='virtio'>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
-    </memballoon>
+    <sound model='ich6'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+    </sound>
+    <interface type='bridge'>
+      <mac address='{$mac}'/>
+      <source bridge='br0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
+    </interface>
+    <controller type='virtio-serial' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0'/>
+    </controller>
   </devices>
 </domain>
 XML;

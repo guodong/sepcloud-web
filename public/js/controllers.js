@@ -24,22 +24,24 @@ appControllers.controller('IndexCtrl', function ($scope, $routeParams, $location
         });
     }
 }]).controller('InstanceCtrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
-
     if (!window.admin) {
         $location.path('login');
         return;
     }
-    $http.get('instance.json').success(function (data) {
-        $scope.instances = data;
-        $scope.check();
-        var p = setInterval($scope.check, 5000);
-    });
+    $scope.loadInstance();
+    $scope.check();
+    var p = setInterval($scope.check, 5000);
+    $scope.loadInstance = function(){
+    	$http.get('instance.json').success(function (data) {
+	        $scope.instances = data;
+	    });
+    }
+    
     $http.get('user.json').success(function (d) {
         $scope.users = d;
     });
     $scope.check = function () {
         for (var i in $scope.instances) {
-            // $scope.instances[i].status =
             $http({
                 url: 'instance/status.json?uuid=' + $scope.instances[i].uuid,
                 method: 'GET',
@@ -68,8 +70,8 @@ appControllers.controller('IndexCtrl', function ($scope, $routeParams, $location
             data: $.param(instance),
 
         }).success(function (data) {
-            // $('#create').modal('toggle');
-            location.reload();
+            $('#create').modal('hide');
+            $scope.loadInstance();
         });
     };
     $scope.start = function (instance) {
