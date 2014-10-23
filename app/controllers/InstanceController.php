@@ -53,7 +53,7 @@ class InstanceController extends BaseController
     {
         // $vm = Vm::create($_POST);
         $uuid = Uuid::uuid1();
-        $cmd = "qemu-img create -b /var/lib/libvirt/images/{$_POST['os']}.qcow2 -f qcow2 /var/lib/libvirt/images/{$uuid}.qcow2";
+        $cmd = "qemu-img create -b /var/lib/libvirt/images/{$_POST['os']}.base.qcow2 -f qcow2 /var/lib/libvirt/images/{$uuid}.qcow2";
         system($cmd);
         sleep(1);
         $_POST['uuid'] = $uuid;
@@ -88,25 +88,20 @@ class InstanceController extends BaseController
       <driver name='qemu' type='qcow2' cache='none'/>
       <source file='/var/lib/libvirt/images/{$uuid}.qcow2'/>
       <target dev='hda' bus='ide'/>
-      <alias name='ide0-0-0'/>
       <address type='drive' controller='0' bus='0' target='0' unit='0'/>
     </disk>
     <controller type='usb' index='0'>
-      <alias name='usb0'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x2'/>
     </controller>
-    <controller type='pci' index='0' model='pci-root'>
-      <alias name='pci.0'/>
-    </controller>
+    <controller type='pci' index='0' model='pci-root'/>
     <controller type='virtio-serial' index='0'>
-      <alias name='virtio-serial0'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0'/>
     </controller>
-    <interface type='network'>
-      <mac address='52:54:00:f3:5c:0d'/>
-      <source network='default'/>
+    <interface type='bridge'>
+      <mac address='52:54:00:e9:3a:8c'/>
+      <source bridge='br0'/>
       <model type='rtl8139'/>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
     </interface>
     <serial type='pty'>
       <target port='0'/>
@@ -139,6 +134,5 @@ XML;
         $vm = Vm::create($_POST);
         $conn=libvirt_connect("null", false);
         libvirt_domain_create_xml($conn, $xml);
-        //echo libvirt_get_last_
     }
 }
